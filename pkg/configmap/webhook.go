@@ -18,8 +18,10 @@ import (
 const (
 	DefaultTruststoreName = "cacerts"
 
-	annotationTruststoreName = "ch.bakito/truststore/fileName"
-	annotationTruststorePass = "ch.bakito/truststore/password"
+	LabelEnabled = "ch.bakito.truststore/enabled"
+
+	annotationTruststoreName = "ch.bakito.truststore/fileName"
+	annotationTruststorePass = "ch.bakito.truststore/password"
 )
 
 type Webhook struct {
@@ -44,6 +46,12 @@ func (w *Webhook) Mutate(ctx context.Context, _ admission.Request, object runtim
 	tsn := DefaultTruststoreName
 	if n, ok := cm.Annotations[annotationTruststoreName]; ok {
 		tsn = n
+	}
+
+	// delete if the label is not present anymore
+	if !isEnabled(cm) {
+		delete(cm.BinaryData, tsn)
+		return admission.Allowed("")
 	}
 
 	var allPems []*pem.Block
@@ -77,4 +85,12 @@ func readCerts(certFile string) []*pem.Block {
 	}
 
 	return pems
+}
+
+func isEnabled(cm *corev1.ConfigMap) bool {
+	if cm.Labels == nil {
+		return false
+	}
+	_, ok := cm.Labels[LabelEnabled]
+	return ok
 }

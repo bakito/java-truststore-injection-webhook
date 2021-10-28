@@ -26,6 +26,9 @@ var _ = Describe("Configmap", func() {
 			cm = &corev1.ConfigMap{
 				ObjectMeta: metav1.ObjectMeta{
 					CreationTimestamp: metav1.Now(),
+					Labels: map[string]string{
+						configmap.LabelEnabled: "true",
+					},
 				},
 				Data: make(map[string]string),
 			}
@@ -36,6 +39,7 @@ var _ = Describe("Configmap", func() {
 			Ω(cm.BinaryData).Should(HaveLen(1))
 			Ω(cm.BinaryData).Should(HaveKey(configmap.DefaultTruststoreName))
 		})
+
 		It("should cacert must be reproducable", func() {
 			cm.Data["a.pem"] = cert
 			wh.Mutate(ctx, admission.Request{}, cm)
@@ -44,7 +48,13 @@ var _ = Describe("Configmap", func() {
 			wh.Mutate(ctx, admission.Request{}, cm)
 			cacert2 := cm.BinaryData[configmap.DefaultTruststoreName]
 			Ω(cacert1).Should(Equal(cacert2))
+		})
 
+		It("should remove cacert if the label is missing", func() {
+			delete(cm.Labels, configmap.LabelEnabled)
+			cm.BinaryData = map[string][]byte{configmap.DefaultTruststoreName: []byte("test")}
+			wh.Mutate(ctx, admission.Request{}, cm)
+			Ω(cm.BinaryData).Should(BeEmpty())
 		})
 	})
 })
