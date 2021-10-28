@@ -3,7 +3,6 @@ package configmap
 import (
 	"context"
 	"encoding/pem"
-	"fmt"
 	"github.com/bakito/cacert-truststore-webhook/pkg/jks"
 	"strings"
 
@@ -17,6 +16,8 @@ import (
 )
 
 const (
+	DefaultTruststoreName = "cacerts"
+
 	annotationTruststoreName = "ch.bakito/truststore/fileName"
 	annotationTruststorePass = "ch.bakito/truststore/password"
 )
@@ -40,39 +41,32 @@ func (w *Webhook) Mutate(ctx context.Context, _ admission.Request, object runtim
 	if p, ok := cm.Annotations[annotationTruststorePass]; ok {
 		pass = p
 	}
-	fileName := "cacerts"
+	tsn := DefaultTruststoreName
 	if n, ok := cm.Annotations[annotationTruststoreName]; ok {
-		fileName = n
+		tsn = n
 	}
 
 	var allPems []*pem.Block
-	// delete all errors
-	for name := range cm.Data {
-		if strings.HasSuffix(name, ".error") {
-			delete(cm.Data, name)
-		}
-	}
 	for name, content := range cm.Data {
 		if strings.HasSuffix(name, ".pem") {
-			pems, err := readCerts(content)
-			if err == nil {
-				allPems = append(allPems, pems...)
-			} else {
-				cm.Data[fmt.Sprintf("%s.error", name)] = err.Error()
-			}
+			allPems = append(allPems, readCerts(content)...)
 		}
 	}
 
-	b, _ := jks.ExportCerts(allPems, pass)
+	if len(allPems) > 0 {
+		b, _ := jks.ExportCerts(allPems, pass)
 
-	if cm.BinaryData == nil {
-		cm.BinaryData = make(map[string][]byte)
+		if cm.BinaryData == nil {
+			cm.BinaryData = make(map[string][]byte)
+		}
+		cm.BinaryData[tsn] = b
+	} else {
+		delete(cm.BinaryData, tsn)
 	}
-	cm.BinaryData[fileName] = b
 	return admission.Allowed("")
 }
 
-func readCerts(certFile string) ([]*pem.Block, error) {
+func readCerts(certFile string) []*pem.Block {
 	raw := []byte(certFile)
 	var pems []*pem.Block
 	for {
@@ -86,5 +80,5 @@ func readCerts(certFile string) ([]*pem.Block, error) {
 		raw = rest
 	}
 
-	return pems, nil
+	return pems
 }

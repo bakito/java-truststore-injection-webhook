@@ -3,17 +3,37 @@ package configmap_test
 import (
 	"context"
 	"github.com/bakito/cacert-truststore-webhook/pkg/configmap"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 	corev1 "k8s.io/api/core/v1"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
-	"testing"
 )
 
-func TestMutate(t *testing.T) {
-	wh := &configmap.Webhook{}
-	cm := &corev1.ConfigMap{
-		Data: make(map[string]string),
-	}
-	cm.Data["a.pem"] = `-----BEGIN CERTIFICATE-----
+var _ = Describe("Configmap", func() {
+	Context("Mutate", func() {
+		var (
+			ctx context.Context
+			wh  *configmap.Webhook
+			cm  *corev1.ConfigMap
+		)
+		BeforeEach(func() {
+			ctx = context.TODO()
+			wh = &configmap.Webhook{}
+			cm = &corev1.ConfigMap{
+				Data: make(map[string]string),
+			}
+		})
+		It("should add a cacerts binary entry", func() {
+			cm.Data["a.pem"] = cert
+			wh.Mutate(ctx, admission.Request{}, cm)
+			Ω(cm.BinaryData).Should(HaveLen(1))
+			Ω(cm.BinaryData).Should(HaveKey(configmap.DefaultTruststoreName))
+		})
+	})
+})
+
+const (
+	cert = `-----BEGIN CERTIFICATE-----
 MIIH0zCCBbugAwIBAgIIXsO3pkN/pOAwDQYJKoZIhvcNAQEFBQAwQjESMBAGA1UE
 AwwJQUNDVlJBSVoxMRAwDgYDVQQLDAdQS0lBQ0NWMQ0wCwYDVQQKDARBQ0NWMQsw
 CQYDVQQGEwJFUzAeFw0xMTA1MDUwOTM3MzdaFw0zMDEyMzEwOTM3MzdaMEIxEjAQ
@@ -57,6 +77,4 @@ h1xA2syVP1XgNce4hL60Xc16gwFy7ofmXx2utYXGJt/mwZrpHgJHnyqobalbz+xF
 d3+YJ5oyXSrjhO7FmGYvliAd3djDJ9ew+f7Zfc3Qn48LFFhRny+Lwzgt3uiP1o2H
 pPVWQxaZLPSkVrQ0uGE3ycJYgBugl6H8WY3pEfbRD0tVNEYqi4Y7
 -----END CERTIFICATE-----`
-	wh.Mutate(context.TODO(), admission.Request{}, cm)
-	println(cm)
-}
+)
