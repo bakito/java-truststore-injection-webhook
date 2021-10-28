@@ -1,0 +1,63 @@
+name: docker-image
+
+on:
+  push:
+    branches:
+      - main
+  release:
+    types:
+      - published
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date --utc +%Y-%m-%dT%H:%M:%SZ)"
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to ghcr.io
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push ${{github.event.release.tag_name }}
+        id: docker_build_release
+        uses: docker/build-push-action@v2
+        if: ${{ github.event.release.tag_name != '' }}
+        with:
+          push: true
+          tags: ghcr.io/bakito/java-truststore-injection-webhook:latest,ghcr.io/bakito/java-truststore-injection-webhook:${{ github.event.release.tag_name }}
+          platforms: linux/amd64
+          build-args: |
+            VERSION=${{ github.event.release.tag_name }}
+            BUILD=${{ steps.date.outputs.date }}
+
+      - name: Build and push main
+        id: docker_build_main
+        uses: docker/build-push-action@v2
+        if: ${{ github.event.release.tag_name == '' }}
+        with:
+          push: true
+          tags: ghcr.io/bakito/java-truststore-injection-webhook:main
+          platforms: linux/amd64
+          build-args: |
+            VERSION=main
+            BUILD=${{ steps.date.outputs.date }}
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
+
+      - name: Prune
+        uses: bakito/action-ghcr-prune@main
+        with:
+          token: ${{ secrets.PRUNE_IMAGE_TOKEN }}
+          user: bakito
+          container: java-truststore-injection-webhook
+          dry-run: false # Dry-run first, then change to `false`
+          older-than: 7 # days
+          keep-last: 2
+          untagged: true

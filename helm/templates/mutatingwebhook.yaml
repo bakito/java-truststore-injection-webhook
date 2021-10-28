@@ -1,0 +1,36 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: {{ include "java-truststore-injection-webhook.fullname" . }}
+  labels:
+  {{- include "java-truststore-injection-webhook.labels" . | nindent 4 }}
+  annotations:
+    service.beta.openshift.io/inject-cabundle: 'true'
+webhooks:
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      caBundle: Cg==
+      service:
+        name: {{ include "java-truststore-injection-webhook.fullname" . }}
+        namespace: {{ .Release.Namespace }}
+        path: /mutate
+        port: {{ .Values.service.port }}
+    failurePolicy: Fail
+    name: truststore-injector.bakito.ch
+    rules:
+      - apiGroups:
+          - ""
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - configmaps
+    objectSelector:
+      # should only be mutated when label is present. objectSelector is evaluated against both the oldObject and newObject
+      matchLabels:
+        truststore-injector.bakito.ch/inject-truststore: 'true'
+    sideEffects: None

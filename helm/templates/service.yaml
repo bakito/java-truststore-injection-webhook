@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "java-truststore-injection-webhook.fullname" . }}
+  labels:
+    {{- include "java-truststore-injection-webhook.labels" . | nindent 4 }}
+  annotations:
+    service.beta.openshift.io/serving-cert-secret-name: java-truststore-injection-webhook-certs
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: 9443
+      protocol: TCP
+      name: webhook
+  selector:
+    {{- include "java-truststore-injection-webhook.selectorLabels" . | nindent 4 }}
