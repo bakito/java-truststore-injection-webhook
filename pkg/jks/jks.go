@@ -17,20 +17,20 @@ var (
 	out io.Writer = os.Stdout // modified during testing
 )
 
-func ExportCerts(pems []*pem.Block, jksPassword string) ([]byte, error) {
+func ExportCerts(pems []*pem.Block, jksPassword string, t time.Time) ([]byte, error) {
 	ks := keystore.KeyStore{}
 
 	for i, p := range pems {
 		ce := &keystore.TrustedCertificateEntry{
 			Entry: keystore.Entry{
-				CreationDate: time.Now(),
+				CreationDate: t,
 			},
 			Certificate: keystore.Certificate{
 				Content: p.Bytes,
 				Type:    "X.509",
 			},
 		}
-		ce.CreationDate = time.Now()
+		ce.CreationDate = t
 
 		ks[fmt.Sprintf("cert_%d", +i)] = ce
 	}

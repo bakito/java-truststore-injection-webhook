@@ -53,16 +53,12 @@ func (w *Webhook) Mutate(ctx context.Context, _ admission.Request, object runtim
 		}
 	}
 
-	if len(allPems) > 0 {
-		b, _ := jks.ExportCerts(allPems, pass)
+	b, _ := jks.ExportCerts(allPems, pass, cm.ObjectMeta.CreationTimestamp.Time)
 
-		if cm.BinaryData == nil {
-			cm.BinaryData = make(map[string][]byte)
-		}
-		cm.BinaryData[tsn] = b
-	} else {
-		delete(cm.BinaryData, tsn)
+	if cm.BinaryData == nil {
+		cm.BinaryData = make(map[string][]byte)
 	}
+	cm.BinaryData[tsn] = b
 	return admission.Allowed("")
 }
 

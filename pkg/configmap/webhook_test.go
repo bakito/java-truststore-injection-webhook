@@ -2,10 +2,14 @@ package configmap_test
 
 import (
 	"context"
-	"github.com/bakito/cacert-truststore-webhook/pkg/configmap"
+	"time"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+
+	"github.com/bakito/cacert-truststore-webhook/pkg/configmap"
 	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
@@ -20,6 +24,9 @@ var _ = Describe("Configmap", func() {
 			ctx = context.TODO()
 			wh = &configmap.Webhook{}
 			cm = &corev1.ConfigMap{
+				ObjectMeta: metav1.ObjectMeta{
+					CreationTimestamp: metav1.Now(),
+				},
 				Data: make(map[string]string),
 			}
 		})
@@ -28,6 +35,16 @@ var _ = Describe("Configmap", func() {
 			wh.Mutate(ctx, admission.Request{}, cm)
 			Ω(cm.BinaryData).Should(HaveLen(1))
 			Ω(cm.BinaryData).Should(HaveKey(configmap.DefaultTruststoreName))
+		})
+		It("should cacert must be reproducable", func() {
+			cm.Data["a.pem"] = cert
+			wh.Mutate(ctx, admission.Request{}, cm)
+			cacert1 := cm.BinaryData[configmap.DefaultTruststoreName]
+			time.Sleep(3 * time.Second)
+			wh.Mutate(ctx, admission.Request{}, cm)
+			cacert2 := cm.BinaryData[configmap.DefaultTruststoreName]
+			Ω(cacert1).Should(Equal(cacert2))
+
 		})
 	})
 })

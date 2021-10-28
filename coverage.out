@@ -1,0 +1,19 @@
+mode: set
+github.com/bakito/cacert-truststore-webhook/pkg/configmap/webhook.go:29.70,33.2 1 0
+github.com/bakito/cacert-truststore-webhook/pkg/configmap/webhook.go:35.110,41.59 4 1
+github.com/bakito/cacert-truststore-webhook/pkg/configmap/webhook.go:44.2,45.59 2 1
+github.com/bakito/cacert-truststore-webhook/pkg/configmap/webhook.go:49.2,50.37 2 1
+github.com/bakito/cacert-truststore-webhook/pkg/configmap/webhook.go:56.2,58.26 2 1
+github.com/bakito/cacert-truststore-webhook/pkg/configmap/webhook.go:61.2,62.30 2 1
+github.com/bakito/cacert-truststore-webhook/pkg/configmap/webhook.go:41.59,43.3 1 0
+github.com/bakito/cacert-truststore-webhook/pkg/configmap/webhook.go:45.59,47.3 1 0
+github.com/bakito/cacert-truststore-webhook/pkg/configmap/webhook.go:50.37,51.38 1 1
+github.com/bakito/cacert-truststore-webhook/pkg/configmap/webhook.go:51.38,53.4 1 1
+github.com/bakito/cacert-truststore-webhook/pkg/configmap/webhook.go:58.26,60.3 1 1
+github.com/bakito/cacert-truststore-webhook/pkg/configmap/webhook.go:65.46,68.6 3 1
+github.com/bakito/cacert-truststore-webhook/pkg/configmap/webhook.go:79.2,79.13 1 1
+github.com/bakito/cacert-truststore-webhook/pkg/configmap/webhook.go:68.6,70.19 2 1
+github.com/bakito/cacert-truststore-webhook/pkg/configmap/webhook.go:73.3,73.34 1 1
+github.com/bakito/cacert-truststore-webhook/pkg/configmap/webhook.go:76.3,76.13 1 1
+github.com/bakito/cacert-truststore-webhook/pkg/configmap/webhook.go:70.19,71.9 1 1
+github.com/bakito/cacert-truststore-webhook/pkg/configmap/webhook.go:73.34,75.4 1 1
