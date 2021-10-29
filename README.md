@@ -1,4 +1,4 @@
-# jti-webhook
+# Java Truststore Injection Webhook
 
 This webhook injects a java truststore into a k8s ConfigMap containing pem certificates. If a ConfigMap is labelled to
 be injected with a java truststore, the webhook checks all existing data entries for pem certificates and adds all found
@@ -42,4 +42,15 @@ apiVersion: v1
 metadata:
   annotations:
     jti.bakito.ch/truststore-password": 'custom-password'
+```
+
+## Installation
+
+**java-truststore-injection-webhook** can be installed via our Helm chart:
+
+```sh
+helm repo add bakito https://bakito.github.io/helm-charts
+helm repo update
+
+helm upgrade --install java-truststore-injection-webhook bakito/java-truststore-injection-webhook
 ```
