@@ -52,12 +52,11 @@ jobs:
         run: echo ${{ steps.docker_build.outputs.digest }}
 
       - name: Prune
-        uses: bakito/action-ghcr-prune@main
+        uses: bakito/action-ghcr-prune@minified-user
         with:
           token: ${{ secrets.PRUNE_IMAGE_TOKEN }}
           user: bakito
           container: java-truststore-injection-webhook
           dry-run: false # Dry-run first, then change to `false`
           older-than: 7 # days
-          keep-last: 2
           untagged: true
