@@ -3,25 +3,24 @@ package configmap
 import (
 	"context"
 	"encoding/pem"
-	"github.com/bakito/cacert-truststore-webhook/pkg/jks"
 	"strings"
 
+	"github.com/bakito/cacert-truststore-webhook/pkg/jks"
+	"github.com/snorwin/k8s-generic-webhook/pkg/webhook"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
-
-	"github.com/snorwin/k8s-generic-webhook/pkg/webhook"
 )
 
 const (
 	DefaultTruststoreName = "cacerts"
 
-	LabelEnabled = "ch.bakito.truststore/enabled"
+	LabelEnabled = "truststore.bakito.ch/enabled"
 
-	annotationTruststoreName = "ch.bakito.truststore/fileName"
-	annotationTruststorePass = "ch.bakito.truststore/password"
+	annotationTruststoreName = "truststore.bakito.ch/fileName"
+	annotationTruststorePass = "truststore.bakito.ch/password"
 )
 
 type Webhook struct {
@@ -31,6 +30,7 @@ type Webhook struct {
 func (w *Webhook) SetupWebhookWithManager(mgr manager.Manager) error {
 	return webhook.NewGenericWebhookManagedBy(mgr).
 		For(&corev1.ConfigMap{}).
+		WithMutatePath("/mutate").
 		Complete(w)
 }
 
