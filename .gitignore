@@ -3,3 +3,4 @@ cacert
 coverage.out
 private.*
 dist
+certs

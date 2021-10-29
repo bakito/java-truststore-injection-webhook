@@ -3,28 +3,28 @@ kind: Deployment
 metadata:
   name: {{ include "java-truststore-injection-webhook.fullname" . }}
   labels:
-    {{- include "java-truststore-injection-webhook.labels" . | nindent 4 }}
+  {{- include "java-truststore-injection-webhook.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "java-truststore-injection-webhook.selectorLabels" . | nindent 6 }}
+  {{- include "java-truststore-injection-webhook.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "java-truststore-injection-webhook.selectorLabels" . | nindent 8 }}
+    {{- include "java-truststore-injection-webhook.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "java-truststore-injection-webhook.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -38,11 +38,20 @@ spec:
               name: "webhook-certs"
               readOnly: true
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+          {{- toYaml .Values.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8081
       {{- with .Values.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 8 }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
+
       volumes:
         - name: "webhook-certs"
           secret:

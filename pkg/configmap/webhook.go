@@ -3,11 +3,13 @@ package configmap
 import (
 	"context"
 	"encoding/pem"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/snorwin/k8s-generic-webhook/pkg/webhook"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
+	"sigs.k8s.io/controller-runtime/pkg/metrics"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 	"strings"
 )
@@ -21,6 +23,21 @@ const (
 	annotationTruststorePass     = "jti.bakito.ch/truststore-password" // #nosec G101
 	AnnotationLastTruststoreName = "jti.bakito.ch/last-injected-truststore-name"
 )
+
+var (
+	certsInConfigMap = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: "jti_certificates_truststore",
+			Help: "Number certificates in the truststore",
+		},
+		[]string{"namespace", "configmap", "truststore"},
+	)
+)
+
+func init() {
+	// Register custom metrics with the global prometheus registry
+	metrics.Registry.MustRegister(certsInConfigMap)
+}
 
 type Webhook struct {
 	webhook.MutatingWebhook
@@ -51,18 +68,22 @@ func (w *Webhook) Mutate(ctx context.Context, _ admission.Request, object runtim
 		if p, ok := cm.Annotations[annotationTruststorePass]; ok {
 			pass = p
 		}
-		if ltn, ok := cm.Annotations[AnnotationLastTruststoreName]; ok {
+		if ltn, ok := cm.Annotations[AnnotationLastTruststoreName]; ok && cm.BinaryData != nil {
 			delete(cm.BinaryData, ltn)
+			certsInConfigMap.DeleteLabelValues(cm.Namespace, cm.Name, ltn)
 		}
 	}
 
 	// delete if the label is not present anymore
 	if !isEnabled(cm) {
 		l.Info("removing truststore")
-		delete(cm.BinaryData, tsn)
+		if cm.BinaryData != nil {
+			delete(cm.BinaryData, tsn)
+		}
 		if cm.Annotations != nil {
 			delete(cm.Annotations, AnnotationLastTruststoreName)
 		}
+		certsInConfigMap.DeleteLabelValues(cm.Namespace, cm.Name, tsn)
 		return admission.Allowed("")
 	}
 
@@ -84,6 +105,8 @@ func (w *Webhook) Mutate(ctx context.Context, _ admission.Request, object runtim
 	}
 	cm.Annotations[AnnotationLastTruststoreName] = tsn
 	l.WithValues("certs", len(allPems), "truststore", tsn).Info("added certs to truststore")
+	certsInConfigMap.WithLabelValues(cm.Namespace, cm.Name, tsn).Set(float64(len(allPems)))
+
 	return admission.Allowed("")
 }
 
