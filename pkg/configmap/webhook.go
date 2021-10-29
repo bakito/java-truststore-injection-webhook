@@ -3,15 +3,13 @@ package configmap
 import (
 	"context"
 	"encoding/pem"
-	"strings"
-
-	"github.com/bakito/java-truststore-injection-webhook/pkg/jks"
 	"github.com/snorwin/k8s-generic-webhook/pkg/webhook"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
+	"strings"
 )
 
 const (
@@ -20,7 +18,7 @@ const (
 	LabelEnabled        = "jti.bakito.ch/inject-truststore"
 	LabelTruststoreName = "jti.bakito.ch/truststore-name"
 
-	annotationTruststorePass     = "jti.bakito.ch/truststore-password"
+	annotationTruststorePass     = "jti.bakito.ch/truststore-password" // #nosec G101
 	AnnotationLastTruststoreName = "jti.bakito.ch/last-injected-truststore-name"
 )
 
@@ -75,7 +73,7 @@ func (w *Webhook) Mutate(ctx context.Context, _ admission.Request, object runtim
 		allPems = append(allPems, pems...)
 	}
 
-	b, _ := jks.ExportCerts(allPems, pass, cm.ObjectMeta.CreationTimestamp.Time)
+	b, _ := exportCerts(allPems, pass, cm.ObjectMeta.CreationTimestamp.Time)
 
 	if cm.BinaryData == nil {
 		cm.BinaryData = make(map[string][]byte)

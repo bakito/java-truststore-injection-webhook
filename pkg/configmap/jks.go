@@ -1,23 +1,14 @@
-package jks
+package configmap
 
 import (
 	"bytes"
-	"crypto/x509"
 	"encoding/pem"
 	"fmt"
-	"io"
-	"os"
-	"strings"
-	"time"
-
 	"github.com/pavel-v-chernykh/keystore-go"
+	"time"
 )
 
-var (
-	out io.Writer = os.Stdout // modified during testing
-)
-
-func ExportCerts(pems []*pem.Block, jksPassword string, t time.Time) ([]byte, error) {
+func exportCerts(pems []*pem.Block, jksPassword string, t time.Time) ([]byte, error) {
 	ks := keystore.KeyStore{}
 
 	for i, p := range pems {
@@ -41,12 +32,4 @@ func ExportCerts(pems []*pem.Block, jksPassword string, t time.Time) ([]byte, er
 		return nil, err
 	}
 	return buf.Bytes(), nil
-}
-
-func alias(cert *x509.Certificate) string {
-	return fmt.Sprintf("%s (%s)", strings.ToLower(cert.Subject.CommonName), strings.ToLower(cert.Issuer.CommonName))
-}
-
-func closeIt(s *os.File) {
-	_ = s.Close()
 }
