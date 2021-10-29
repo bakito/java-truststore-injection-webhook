@@ -5,7 +5,7 @@ import (
 	"encoding/pem"
 	"strings"
 
-	"github.com/bakito/cacert-truststore-webhook/pkg/jks"
+	"github.com/bakito/truststore-injector-webhook/pkg/jks"
 	"github.com/snorwin/k8s-generic-webhook/pkg/webhook"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -17,10 +17,10 @@ import (
 const (
 	DefaultTruststoreName = "cacerts"
 
-	LabelEnabled = "truststore.bakito.ch/enabled"
+	LabelEnabled = "truststore-injector.bakito.ch/enabled"
 
-	annotationTruststoreName = "truststore.bakito.ch/fileName"
-	annotationTruststorePass = "truststore.bakito.ch/password"
+	annotationTruststoreName = "truststore-injector.bakito.ch/fileName"
+	annotationTruststorePass = "truststore-injector..bakito.ch/password"
 )
 
 type Webhook struct {

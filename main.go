@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"github.com/bakito/cacert-truststore-webhook/pkg/configmap"
+	"github.com/bakito/truststore-injector-webhook/pkg/configmap"
 	"os"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)

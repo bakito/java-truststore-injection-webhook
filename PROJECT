@@ -4,6 +4,6 @@ layout:
 plugins:
   manifests.sdk.operatorframework.io/v2: {}
   scorecard.sdk.operatorframework.io/v2: {}
-projectName: cacert-truststore-webhook
-repo: github.com/bakito/cacert-truststore-webhook
+projectName: truststore-injector-webhook
+repo: github.com/bakito/truststore-injector-webhook
 version: "3"

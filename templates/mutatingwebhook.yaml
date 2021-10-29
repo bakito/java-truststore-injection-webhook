@@ -1,15 +1,15 @@
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: MutatingWebhookConfiguration
 metadata:
-  name: cacert-truststore-webhook-cfg
+  name: truststore-injector-webhook-cfg
   labels:
-    app: cacert-truststore
+    app: truststore-injector
 webhooks:
-  - name: cacert-truststore.bakito.ch
+  - name: truststore-injector.bakito.ch
     clientConfig:
       service:
-        name: cacert-truststore-webhook-svc
-        namespace: cacert-truststore
+        name: truststore-injector-webhook-svc
+        namespace: truststore-injector
         path: "/mutate"
       caBundle: ${CA_BUNDLE}
     rules:

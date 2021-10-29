@@ -1,4 +1,4 @@
-module github.com/bakito/cacert-truststore-webhook
+module github.com/bakito/truststore-injector-webhook
 
 go 1.16
 
