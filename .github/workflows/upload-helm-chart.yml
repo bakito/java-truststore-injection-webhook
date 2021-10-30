@@ -25,7 +25,9 @@ jobs:
         uses: azure/setup-helm@v1
 
       - name: Build chart
-        run: helm package ./charts/java-truststore-injection-webhook/ --version ${{github.event.release.tag_name }} --app-version v${{github.event.release.tag_name }} -d dist
+        run: |
+          VERSION=$(echo "${{github.event.release.tag_name }}" | sed 's/v//g')
+          helm package ./charts/java-truststore-injection-webhook/ --version $VERSION --app-version v$VERSION -d dist
 
       - name: Install chart-releaser
         uses: engineerd/configurator@v0.0.8
@@ -40,3 +42,4 @@ jobs:
           CR_OWNER: "${{github.repository_owner}}"
           CR_TOKEN: "${{secrets.CR_TOKEN}}"
           CR_GIT_REPO: "helm-charts"
+          CR_PACKAGE_PATH: dist
