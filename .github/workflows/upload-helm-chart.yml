@@ -35,6 +35,8 @@ jobs:
           pathInArchive: cr
 
       - name: Upload Chart
-        run: cr upload --config .chart-releaser.yaml
+        run: cr upload
         env:
-          CR_TOKEN: "${{ secrets.CR_TOKEN }}"
+          CR_OWNER: "${{github.repository_owner}}"
+          CR_TOKEN: "${{secrets.CR_TOKEN}}"
+          CR_GIT_REPO: "helm-charts"
