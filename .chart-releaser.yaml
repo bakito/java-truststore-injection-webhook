@@ -1,0 +1,7 @@
+owner: bakito
+git-repo: helm-charts
+git-base-url: https://api.github.com/
+git-upload-url: https://uploads.github.com/
+charts-repo: https://bakito.github.io/helm-charts/
+pages-branch: main
+package-path: dist
