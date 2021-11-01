@@ -13,7 +13,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   labels:
-    jtsi.bakito.ch/inject-truststore: 'true'
+    jti.bakito.ch/inject-truststore: 'true'
 ```
 
 ## truststore file name
