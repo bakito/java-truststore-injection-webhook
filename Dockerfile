@@ -12,7 +12,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o java-truststore-injecti
     upx -q java-truststore-injection-webhook
 
 FROM gcr.io/distroless/static:nonroot
-ENTRYPOINT ["/java-truststore-injection-webhook"]
+ENTRYPOINT ["/opt/go/java-truststore-injection-webhook"]
 WORKDIR /opt/go/
 COPY --from=builder /workspace/java-truststore-injection-webhook /opt/go/java-truststore-injection-webhook
 USER 1001:1001
