@@ -17,7 +17,7 @@ webhooks:
         namespace: {{ .Release.Namespace }}
         path: /mutate
         port: {{ .Values.service.port }}
-    failurePolicy: Fail
+    failurePolicy: {{ .Values.webhook.failurePolicy }}
     name: truststore-injector.bakito.ch
     rules:
       - apiGroups:

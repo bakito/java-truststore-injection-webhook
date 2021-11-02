@@ -40,3 +40,5 @@ resources: {}
 
 nodeSelector: {}
 
+webhook:
+  failurePolicy: Fail
