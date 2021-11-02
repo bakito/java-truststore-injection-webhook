@@ -32,5 +32,5 @@ webhooks:
     objectSelector:
       # should only be mutated when label is present. objectSelector is evaluated against both the oldObject and newObject
       matchLabels:
-        truststore-injector.bakito.ch/inject-truststore: 'true'
+        jti.bakito.ch/inject-truststore: 'true'
     sideEffects: None
