@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/onsi/ginkgo v1.16.5
-	github.com/onsi/gomega v1.16.0
+	github.com/onsi/gomega v1.17.0
 	github.com/pavel-v-chernykh/keystore-go v2.1.0+incompatible
 	github.com/prometheus/client_golang v1.11.0
 	github.com/snorwin/k8s-generic-webhook v1.2.4
