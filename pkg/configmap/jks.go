@@ -5,9 +5,10 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
-	"github.com/pavel-v-chernykh/keystore-go"
 	"strings"
 	"time"
+
+	"github.com/pavel-v-chernykh/keystore-go"
 )
 
 func exportCerts(pems []*pem.Block, jksPassword string, t time.Time) ([]byte, error) {

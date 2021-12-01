@@ -3,6 +3,8 @@ package configmap
 import (
 	"context"
 	"encoding/pem"
+	"strings"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/snorwin/k8s-generic-webhook/pkg/webhook"
 	corev1 "k8s.io/api/core/v1"
@@ -11,27 +13,28 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/metrics"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
-	"strings"
 )
 
 const (
+	// DefaultTruststoreName default name of the generated truststore
 	DefaultTruststoreName = "cacerts"
 
-	LabelEnabled        = "jti.bakito.ch/inject-truststore"
+	// LabelEnabled k8s label to enable java truststore injection
+	LabelEnabled = "jti.bakito.ch/inject-truststore"
+	// LabelTruststoreName k8s label to define a custom truststore name
 	LabelTruststoreName = "jti.bakito.ch/truststore-name"
 
-	annotationTruststorePass     = "jti.bakito.ch/truststore-password" // #nosec G101
+	annotationTruststorePass = "jti.bakito.ch/truststore-password" // #nosec G101
+	// AnnotationLastTruststoreName k8s annotation to keep track of the last truststore name
 	AnnotationLastTruststoreName = "jti.bakito.ch/last-injected-truststore-name"
 )
 
-var (
-	certsInConfigMap = prometheus.NewGaugeVec(
-		prometheus.GaugeOpts{
-			Name: "jti_certificates_truststore",
-			Help: "Number certificates in the truststore",
-		},
-		[]string{"namespace", "configmap", "truststore"},
-	)
+var certsInConfigMap = prometheus.NewGaugeVec(
+	prometheus.GaugeOpts{
+		Name: "jti_certificates_truststore",
+		Help: "Number certificates in the truststore",
+	},
+	[]string{"namespace", "configmap", "truststore"},
 )
 
 func init() {
@@ -39,10 +42,12 @@ func init() {
 	metrics.Registry.MustRegister(certsInConfigMap)
 }
 
+// Webhook implementation
 type Webhook struct {
 	webhook.MutatingWebhook
 }
 
+// SetupWebhookWithManager setup this webhook
 func (w *Webhook) SetupWebhookWithManager(mgr manager.Manager) error {
 	return webhook.NewGenericWebhookManagedBy(mgr).
 		For(&corev1.ConfigMap{}).
@@ -50,8 +55,8 @@ func (w *Webhook) SetupWebhookWithManager(mgr manager.Manager) error {
 		Complete(w)
 }
 
+// Mutate the configmap
 func (w *Webhook) Mutate(ctx context.Context, _ admission.Request, object runtime.Object) admission.Response {
-
 	cm := object.(*corev1.ConfigMap)
 
 	l := log.FromContext(ctx).WithValues("configmap", cm.Name)

@@ -1,3 +1,5 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/bakito/java-truststore-injection-webhook)](https://goreportcard.com/report/github.com/bakito/java-truststore-injection-webhook)
+
 # Java Truststore Injection Webhook
 
 This webhook injects a java truststore into a k8s ConfigMap containing pem certificates. If a ConfigMap is labelled to

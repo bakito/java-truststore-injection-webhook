@@ -4,10 +4,9 @@ import (
 	"context"
 	"time"
 
+	"github.com/bakito/java-truststore-injection-webhook/pkg/configmap"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-
-	"github.com/bakito/java-truststore-injection-webhook/pkg/configmap"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
@@ -59,7 +58,7 @@ var _ = Describe("Configmap", func() {
 			Ω(cm.BinaryData).Should(HaveKey(configmap.DefaultTruststoreName))
 		})
 
-		It("should cacert must be reproducable", func() {
+		It("should cacert must be reproducible", func() {
 			cm.Data["a.pem"] = cert
 			wh.Mutate(ctx, admission.Request{}, cm)
 			cacert1 := cm.BinaryData[configmap.DefaultTruststoreName]
