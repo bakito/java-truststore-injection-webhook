@@ -7,7 +7,7 @@ require (
 	github.com/onsi/gomega v1.17.0
 	github.com/pavel-v-chernykh/keystore-go v2.1.0+incompatible
 	github.com/prometheus/client_golang v1.11.0
-	github.com/snorwin/k8s-generic-webhook v1.2.4
+	github.com/snorwin/k8s-generic-webhook v1.3.0
 	k8s.io/api v0.23.1
 	k8s.io/apimachinery v0.23.1
 	k8s.io/client-go v0.23.1
