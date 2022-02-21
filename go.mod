@@ -8,8 +8,8 @@ require (
 	github.com/pavel-v-chernykh/keystore-go v2.1.0+incompatible
 	github.com/prometheus/client_golang v1.12.1
 	github.com/snorwin/k8s-generic-webhook v1.3.0
-	k8s.io/api v0.23.3
-	k8s.io/apimachinery v0.23.3
+	k8s.io/api v0.23.4
+	k8s.io/apimachinery v0.23.4
 	k8s.io/client-go v0.23.3
 	k8s.io/klog/v2 v2.30.0
 	sigs.k8s.io/controller-runtime v0.11.0
