@@ -6,7 +6,7 @@ require (
 	github.com/onsi/ginkgo/v2 v2.1.4
 	github.com/onsi/gomega v1.19.0
 	github.com/pavel-v-chernykh/keystore-go v2.1.0+incompatible
-	github.com/prometheus/client_golang v1.12.1
+	github.com/prometheus/client_golang v1.12.2
 	github.com/snorwin/k8s-generic-webhook v1.3.0
 	k8s.io/api v0.24.0
 	k8s.io/apimachinery v0.24.0
