@@ -35,7 +35,7 @@ var _ = Describe("Configmap", func() {
 		})
 		It("should add a cacerts binary entry", func() {
 			cm.Data["a.pem"] = cert
-			// c, _ := ioutil.ReadFile("/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem")
+			// c, _ := os.ReadFile("/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem")
 			// cm.Data["a.pem"] = string(c)
 			wh.Mutate(ctx, admission.Request{}, cm)
 			Ω(cm.BinaryData).Should(HaveLen(1))
