@@ -5,7 +5,6 @@ linters:
   enable:
   - asciicheck
   - bodyclose
-  - deadcode
   - depguard
   - dogsled
   - durationcheck
@@ -27,8 +26,6 @@ linters:
   - nolintlint
   - revive
   - staticcheck
-  - structcheck
-  - typecheck
   - unconvert
   - unparam
   - unused
@@ -41,3 +38,4 @@ linters-settings:
   gofmt:
     # simplify code: gofmt with `-s` option, true by default
     simplify: true
+
