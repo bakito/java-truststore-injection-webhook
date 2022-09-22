@@ -41,12 +41,12 @@ func exportCerts(pems []*pem.Block, jksPassword string, t time.Time) ([]byte, er
 func alias(pem []byte, i int) string {
 	c, err := x509.ParseCertificate(pem)
 	if err != nil || c.Subject.CommonName == "" {
-		return fmt.Sprintf("truststore-injector_%d", +i)
+		return fmt.Sprintf("truststore-injector_%d", i)
 	}
 	// inspired by: https://github.com/kaikramer/keystore-explorer/blob/79600e0e5cb5799dfc700df0989c5ba04f3d1db1/kse/src/org/kse/crypto/x509/X509CertUtil.java#L651
 
 	if c.Issuer.CommonName == "" || c.Subject.CommonName == c.Issuer.CommonName {
-		return strings.ToLower(c.Subject.CommonName)
+		return strings.ToLower(fmt.Sprintf("%s %d", c.Subject.CommonName, i))
 	}
-	return strings.ToLower(fmt.Sprintf("%s (%s)", c.Subject.CommonName, c.Issuer.CommonName))
+	return strings.ToLower(fmt.Sprintf("%s (%s) %d", c.Subject.CommonName, c.Issuer.CommonName, i))
 }
