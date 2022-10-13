@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/onsi/ginkgo/v2 v2.3.1
-	github.com/onsi/gomega v1.22.0
+	github.com/onsi/gomega v1.22.1
 	github.com/pavel-v-chernykh/keystore-go v2.1.0+incompatible
 	github.com/prometheus/client_golang v1.13.0
 	github.com/snorwin/k8s-generic-webhook v1.4.1
