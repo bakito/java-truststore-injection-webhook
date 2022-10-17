@@ -9,7 +9,7 @@ require (
 	github.com/prometheus/client_golang v1.13.0
 	github.com/snorwin/k8s-generic-webhook v1.4.1
 	k8s.io/api v0.25.2
-	k8s.io/apimachinery v0.25.2
+	k8s.io/apimachinery v0.25.3
 	k8s.io/client-go v0.25.2
 	k8s.io/klog/v2 v2.70.1
 	sigs.k8s.io/controller-runtime v0.13.0
