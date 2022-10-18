@@ -30,11 +30,35 @@ release: semver
 test-release:
 	goreleaser --skip-publish --snapshot --rm-dist
 
-mocks: mockgen
-	mockgen -destination pkg/mocks/core/mock.go     --package core     k8s.io/client-go/kubernetes/typed/core/v1 CoreV1Interface,SecretInterface
-	mockgen -destination pkg/mocks/ssclient/mock.go --package ssclient github.com/bitnami-labs/sealed-secrets/pkg/client/clientset/versioned/typed/sealed-secrets/v1alpha1 BitnamiV1alpha1Interface,SealedSecretInterface
+## Location to install dependencies to
+LOCALBIN ?= $(shell pwd)/bin
+$(LOCALBIN):
+	mkdir -p $(LOCALBIN)
 
-semver:
-ifeq (, $(shell which semver))
- $(shell go get -u github.com/bakito/semver)
-endif
+## Tool Binaries
+SEMVER ?= $(LOCALBIN)/semver
+HELM_DOCS ?= $(LOCALBIN)/helm-docs
+GORELEASER ?= $(LOCALBIN)/goreleaser
+
+## Tool Versions
+SEMVER_VERSION ?= latest
+HELM_DOCS_VERSION ?= v1.11.0
+GORELEASER_VERSION ?= latest
+
+.PHONY: semver
+semver: $(SEMVER) ## Download semver locally if necessary.
+$(SEMVER): $(LOCALBIN)
+	test -s $(LOCALBIN)/semver || GOBIN=$(LOCALBIN) go install github.com/bakito/semver@$(SEMVER_VERSION)
+
+.PHONY: helm-docs
+helm-docs: $(HELM_DOCS) ## Download helm-docs locally if necessary.
+$(HELM_DOCS): $(LOCALBIN)
+	test -s $(LOCALBIN)/helm-docs || GOBIN=$(LOCALBIN) go install github.com/norwoodj/helm-docs/cmd/helm-docs@$(HELM_DOCS_VERSION)
+
+.PHONY: goreleaser
+goreleaser: $(GORELEASER) ## Download goreleaser locally if necessary.
+$(GORELEASER): $(LOCALBIN)
+	test -s $(LOCALBIN)/goreleaser|| GOBIN=$(LOCALBIN) go install github.com/goreleaser/goreleaser@$(GORELEASER_VERSION)
+
+docs: helm-docs
+	@$(LOCALBIN)/helm-docs
