@@ -1,0 +1,42 @@
+name: e2e tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install kind with registry
+        uses: bakito/kind-with-registry-action@main
+
+      - name: Build image
+        run: ./testdata/e2e/buildImage.sh
+
+      - name: Install cert-manager
+        run: ./testdata/e2e/installCertManager.sh
+
+      - name: Install service certificate
+        run: ./testdata/e2e/installCertificate.sh
+
+      - name: Install helm chart
+        run: |
+          ./testdata/e2e/installChart.sh
+          kubectl create ns e2e-test
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Test generated cacerts
+        run: ./testdata/e2e/testConfigMaps.sh

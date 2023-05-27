@@ -1,0 +1,16 @@
+image:
+  repository: localhost:5001/java-truststore-injection-webhook
+  tag: e2e
+  pullPolicy: Always
+
+securityContext:
+  allowPrivilegeEscalation: false
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+  capabilities:
+    drop: [ "ALL" ]
+
+webhook:
+  annotations:
+    cert-manager.io/inject-ca-from: java-truststore-injection-webhook/java-truststore-injection-webhook-certs

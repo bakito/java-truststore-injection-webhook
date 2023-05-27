@@ -5,13 +5,14 @@ metadata:
   labels:
   {{- include "java-truststore-injection-webhook.labels" . | nindent 4 }}
   annotations:
-    service.beta.openshift.io/inject-cabundle: 'true'
+    {{- with .Values.webhook.annotations }}
+      {{ . | toYaml | nindent 6 }}
+    {{- end }}
 webhooks:
   - admissionReviewVersions:
       - v1
       - v1beta1
     clientConfig:
-      caBundle: Cg==
       service:
         name: {{ include "java-truststore-injection-webhook.fullname" . }}
         namespace: {{ .Release.Namespace }}
