@@ -1,6 +1,6 @@
 # java-truststore-injection-webhook
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.0.7](https://img.shields.io/badge/Version-0.0.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.0.7](https://img.shields.io/badge/AppVersion-v0.0.7-informational?style=flat-square)
 
 A Helm chart to install the java truststore injection webhook
 
@@ -21,13 +21,14 @@ helm install java-truststore-injection-webhook bakito/java-truststore-injection-
 | image.tag | string | `""` | Overrides the image tag whose default is the chart appVersion. |
 | nameOverride | string | `""` | String to partially override "argo-rollouts.fullname" template |
 | nodeSelector | object | `{}` | [Node selector] |
-| replicaCount | int | `1` |  |
+| replicaCount | int | `1` | Controller pod replica count |
 | resources | object | `{}` | Resource limits and requests for the operator pods. |
 | service.port | int | `443` | Service port |
 | service.type | string | `"ClusterIP"` | Sets the type of the Service |
 | serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
 | serviceAccount.create | bool | `true` | Specifies whether a service account should be created |
 | serviceAccount.name | string | `""` | The name of the service account to use. If not set and create is true, a name is generated using the fullname template |
+| webhook.annotations | object | `{}` | Webhook annotations |
 | webhook.failurePolicy | string | `"Fail"` | Webhook failure policy |
 
 ----------------------------------------------
