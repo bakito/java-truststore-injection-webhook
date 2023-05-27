@@ -5,8 +5,9 @@ metadata:
   labels:
   {{- include "java-truststore-injection-webhook.labels" . | nindent 4 }}
   annotations:
-    # TODO make configurable
-    cert-manager.io/inject-ca-from: {{.Release.Namespace}}/java-truststore-injection-webhook-certs
+    {{- with .Values.webhook.annotations }}
+      {{ . | toYaml | nindent 6 }}
+    {{- end }}
 webhooks:
   - admissionReviewVersions:
       - v1

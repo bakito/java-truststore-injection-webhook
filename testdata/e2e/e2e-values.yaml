@@ -10,3 +10,7 @@ securityContext:
     type: RuntimeDefault
   capabilities:
     drop: [ "ALL" ]
+
+webhook:
+  annotations:
+    cert-manager.io/inject-ca-from: java-truststore-injection-webhook/java-truststore-injection-webhook-certs

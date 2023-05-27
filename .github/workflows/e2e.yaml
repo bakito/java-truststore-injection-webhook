@@ -31,3 +31,6 @@ jobs:
         run: |
           ./testdata/e2e/installChart.sh
           kubectl create ns e2e-test
+
+      - name: Test generated cacerts
+        run: ./testdata/e2e/testConfigMap.sh
