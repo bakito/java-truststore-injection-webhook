@@ -19,44 +19,12 @@ jobs:
         uses: bakito/kind-with-registry-action@main
 
       - name: Build image
-        run: ./testdata/e2e/buildImage.sh
+        run: ./testdata/e2e/buildImage.shmain
+
+      - name: Install cert-manager
+        run: ./testdata/e2e/installCertManager.sh
 
       - name: Install helm chart
         run: |
           ./testdata/e2e/installChart.sh
           kubectl create ns e2e-test
-
-      - name: Start 'old' eventlogger pod
-        run: |
-          kubectl apply -f testdata/e2e/old-eventlogger-pod.yaml
-          kubectl wait --namespace e2e-test --for=condition=ready pod event-logger-example-eventlogger-old-version --timeout=90s
-
-      - name: Setup an EventLogger
-        run: |
-          kubectl apply -f testdata/e2e/test-eventlogger.yaml
-          kubectl wait --namespace e2e-test \
-            --for=condition=ready pod \
-            --selector=app.kubernetes.io/component=event-logger-example-eventlogger \
-            --timeout=90s
-
-      - name: Check 'old' eventlogger pod is deleted
-        run: |
-          test $(kubectl get pod event-logger-example-eventlogger-old-version --no-headers | wc -l) -eq 0
-
-      - name: Start/Stop test pod
-        run: |
-          kubectl apply -f testdata/e2e/test-pod.yaml
-          kubectl wait --namespace e2e-test --for=condition=ready pod nginx --timeout=90s
-          kubectl delete -f testdata/e2e/test-pod.yaml
-
-      - name: Check logs
-        run: |
-          kubectl logs -n e2e-test -l app.kubernetes.io/component=event-logger-example-eventlogger | grep '"logger":"event"'
-
-      - name: Print logs
-        timeout-minutes: 2
-        run: |
-          echo 'Pod logs' >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          kubectl logs -n e2e-test -l app.kubernetes.io/component=event-logger-example-eventlogger >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY

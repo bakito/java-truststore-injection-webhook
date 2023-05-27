@@ -1,15 +1,12 @@
 image:
-  repository: localhost:5001/k8s-event-logger
+  repository: localhost:5001/java-truststore-injection-webhook
   tag: e2e
   pullPolicy: Always
 
-securityContext: &securityContext
+securityContext:
   allowPrivilegeEscalation: false
   runAsNonRoot: true
   seccompProfile:
     type: RuntimeDefault
   capabilities:
     drop: [ "ALL" ]
-
-eventLogger:
-  securityContext: *securityContext
