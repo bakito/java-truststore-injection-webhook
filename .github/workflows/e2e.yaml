@@ -31,6 +31,12 @@ jobs:
         run: |
           ./testdata/e2e/installChart.sh
           kubectl create ns e2e-test
+      - uses: actions/setup-java@v3
 
+        with:
+
+          distribution: 'temurin' # See 'Supported distributions' for available options
+
+          java-version: '17'
       - name: Test generated cacerts
         run: ./testdata/e2e/testConfigMap.sh
