@@ -15,7 +15,7 @@ webhooks:
       service:
         name: {{ include "java-truststore-injection-webhook.fullname" . }}
         namespace: {{ .Release.Namespace }}
-        path: /mutate
+        path: /mutate--v1-configmap
         port: {{ .Values.service.port }}
     failurePolicy: {{ .Values.webhook.failurePolicy }}
     name: truststore-injector.bakito.ch

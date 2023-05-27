@@ -9,7 +9,6 @@ import (
 	. "github.com/onsi/gomega"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
 var _ = Describe("Configmap", func() {
@@ -37,7 +36,7 @@ var _ = Describe("Configmap", func() {
 			cm.Data["a.pem"] = cert
 			// c, _ := os.ReadFile("/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem")
 			// cm.Data["a.pem"] = string(c)
-			wh.Mutate(ctx, admission.Request{}, cm)
+			wh.Default(ctx, cm)
 			Ω(cm.BinaryData).Should(HaveLen(1))
 			Ω(cm.BinaryData).Should(HaveKey(configmap.DefaultTruststoreName))
 			// Ω(os.WriteFile("cacerts", cm.BinaryData["java-trust.jks"], 0644)).ShouldNot(HaveOccurred())
@@ -45,7 +44,7 @@ var _ = Describe("Configmap", func() {
 		It("should add a cacerts binary entry with custom name", func() {
 			cm.Data["a.pem"] = cert
 			cm.Labels[configmap.LabelTruststoreName] = "java-trust.jks"
-			wh.Mutate(ctx, admission.Request{}, cm)
+			wh.Default(ctx, cm)
 			Ω(cm.BinaryData).Should(HaveLen(1))
 			Ω(cm.BinaryData).Should(HaveKey("java-trust.jks"))
 		})
@@ -53,17 +52,17 @@ var _ = Describe("Configmap", func() {
 			cm.Data["a.pem"] = cert
 			cm.BinaryData = map[string][]byte{"prev.jks": []byte("...")}
 			cm.Annotations[configmap.AnnotationLastTruststoreName] = "prev.jks"
-			wh.Mutate(ctx, admission.Request{}, cm)
+			wh.Default(ctx, cm)
 			Ω(cm.BinaryData).Should(HaveLen(1))
 			Ω(cm.BinaryData).Should(HaveKey(configmap.DefaultTruststoreName))
 		})
 
 		It("should cacert must be reproducible", func() {
 			cm.Data["a.pem"] = cert
-			wh.Mutate(ctx, admission.Request{}, cm)
+			wh.Default(ctx, cm)
 			cacert1 := cm.BinaryData[configmap.DefaultTruststoreName]
 			time.Sleep(3 * time.Second)
-			wh.Mutate(ctx, admission.Request{}, cm)
+			wh.Default(ctx, cm)
 			cacert2 := cm.BinaryData[configmap.DefaultTruststoreName]
 			Ω(cacert1).Should(Equal(cacert2))
 		})
@@ -71,7 +70,7 @@ var _ = Describe("Configmap", func() {
 		It("should remove cacert if the label is missing", func() {
 			delete(cm.Labels, configmap.LabelEnabled)
 			cm.BinaryData = map[string][]byte{configmap.DefaultTruststoreName: []byte("test")}
-			wh.Mutate(ctx, admission.Request{}, cm)
+			wh.Default(ctx, cm)
 			Ω(cm.BinaryData).Should(BeEmpty())
 		})
 	})

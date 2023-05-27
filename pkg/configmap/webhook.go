@@ -6,9 +6,9 @@ import (
 	"strings"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/snorwin/k8s-generic-webhook/pkg/webhook"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+	"sigs.k8s.io/controller-runtime/pkg/builder"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/metrics"
@@ -44,20 +44,20 @@ func init() {
 
 // Webhook implementation
 type Webhook struct {
-	webhook.MutatingWebhook
+	admission.CustomDefaulter
 }
 
 // SetupWebhookWithManager setup this webhook
 func (w *Webhook) SetupWebhookWithManager(mgr manager.Manager) error {
-	return webhook.NewGenericWebhookManagedBy(mgr).
+	return builder.WebhookManagedBy(mgr).
 		For(&corev1.ConfigMap{}).
-		WithMutatePath("/mutate").
-		Complete(w)
+		WithDefaulter(w).
+		Complete()
 }
 
-// Mutate the configmap
-func (w *Webhook) Mutate(ctx context.Context, _ admission.Request, object runtime.Object) admission.Response {
-	cm := object.(*corev1.ConfigMap)
+// Default mutate the configmap
+func (w *Webhook) Default(ctx context.Context, obj runtime.Object) error {
+	cm := obj.(*corev1.ConfigMap)
 
 	l := log.FromContext(ctx).WithValues("configmap", cm.Name)
 
@@ -89,7 +89,7 @@ func (w *Webhook) Mutate(ctx context.Context, _ admission.Request, object runtim
 			delete(cm.Annotations, AnnotationLastTruststoreName)
 		}
 		certsInConfigMap.DeleteLabelValues(cm.Namespace, cm.Name, tsn)
-		return admission.Allowed("")
+		return nil
 	}
 
 	var allPems []*pem.Block
@@ -112,7 +112,7 @@ func (w *Webhook) Mutate(ctx context.Context, _ admission.Request, object runtim
 	l.WithValues("certs", len(allPems), "truststore", tsn).Info("added certs to truststore")
 	certsInConfigMap.WithLabelValues(cm.Namespace, cm.Name, tsn).Set(float64(len(allPems)))
 
-	return admission.Allowed("")
+	return nil
 }
 
 func readCerts(certFile string) []*pem.Block {
