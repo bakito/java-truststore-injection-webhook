@@ -24,6 +24,9 @@ jobs:
       - name: Install cert-manager
         run: ./testdata/e2e/installCertManager.sh
 
+      - name: Install service certificate
+        run: ./testdata/e2e/installCertificate.sh
+
       - name: Install helm chart
         run: |
           ./testdata/e2e/installChart.sh

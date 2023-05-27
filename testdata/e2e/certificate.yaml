@@ -1,12 +1,22 @@
 apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: selfsigned-issuer
+  namespace: java-truststore-injection-webhook
+spec:
+  selfSigned: { }
+
+---
+
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: webhook-certs
   namespace: java-truststore-injection-webhook
 spec:
-  secretName: webhook-certs
+  secretName: java-truststore-injection-webhook-certs
   dnsNames:
     - "*.java-truststore-injection-webhook.svc.cluster.local"
     - "*.java-truststore-injection-webhook"
   issuerRef:
-    name: selfsigned-cluster-issuer
+    name: selfsigned-issuer
