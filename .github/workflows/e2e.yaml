@@ -39,4 +39,4 @@ jobs:
           java-version: '17'
 
       - name: Test generated cacerts
-        run: ./testdata/e2e/testConfigMap.sh
+        run: ./testdata/e2e/testConfigMaps.sh
