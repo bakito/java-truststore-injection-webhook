@@ -1,4 +1,6 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/bakito/java-truststore-injection-webhook)](https://goreportcard.com/report/github.com/bakito/java-truststore-injection-webhook)
+[![e2e tests](https://github.com/bakito/java-truststore-injection-webhook/actions/workflows/e2e.yaml/badge.svg)](https://github.com/bakito/java-truststore-injection-webhook/actions/workflows/e2e.yaml)
+[![GitHub Release](https://img.shields.io/github/release/bakito/java-truststore-injection-webhook.svg?style=flat)](https://github.com/bakito/java-truststore-injection-webhook/releases)
 
 # Java Truststore Injection Webhook
 
