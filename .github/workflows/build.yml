@@ -21,7 +21,7 @@ jobs:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
-          skip-pkg-cache: false
+          skip-pkg-cache: true
 
   build:
     name: go Test
