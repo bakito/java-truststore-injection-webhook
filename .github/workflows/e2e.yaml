@@ -19,7 +19,7 @@ jobs:
         uses: bakito/kind-with-registry-action@main
 
       - name: Build image
-        run: ./testdata/e2e/buildImage.shmain
+        run: ./testdata/e2e/buildImage.sh
 
       - name: Install cert-manager
         run: ./testdata/e2e/installCertManager.sh
