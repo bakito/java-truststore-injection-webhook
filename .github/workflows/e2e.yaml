@@ -15,12 +15,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
       - name: Install kind with registry
         uses: bakito/kind-with-registry-action@main
 
@@ -37,6 +31,12 @@ jobs:
         run: |
           ./testdata/e2e/installChart.sh
           kubectl create ns e2e-test
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
       - name: Test generated cacerts
         run: ./testdata/e2e/testConfigMap.sh
