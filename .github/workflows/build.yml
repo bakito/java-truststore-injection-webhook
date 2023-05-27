@@ -22,7 +22,7 @@ jobs:
         uses: golangci/golangci-lint-action@v3
 
   build:
-    name: Build
+    name: go Test
     runs-on: ubuntu-latest
     steps:
 
