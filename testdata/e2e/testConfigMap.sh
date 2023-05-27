@@ -1,10 +1,11 @@
 #!/bin/bash
 set -e
-sleep 10
-kubectl apply -f testdata/e2e/cert-configmap.yaml
+
+kubectl apply -n java-truststore-injection-webhook -f testdata/e2e/cert-configmap.yaml
+
 echo "Read cacerts"
+
 CACERTS=$(kubectl get cm -n java-truststore-injection-webhook java-certs -o json | jq -r '.binaryData.cacerts')
 
 echo "${CACERTS}" | base64 --decode > cacerts
-keytool -list -v -keystore cacerts
-
+keytool -list -keystore cacerts -storepass changeit | grep "Your keystore contains 1 entry"
