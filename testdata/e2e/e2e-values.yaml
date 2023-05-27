@@ -1,5 +1,5 @@
 image:
-  repository: localhost:5001/java-truststore-injection-webhook
+  repository: localhost:5001/jti
   tag: e2e
   pullPolicy: Always
 
@@ -13,4 +13,4 @@ securityContext:
 
 webhook:
   annotations:
-    cert-manager.io/inject-ca-from: java-truststore-injection-webhook/java-truststore-injection-webhook-certs
+    cert-manager.io/inject-ca-from: jti/java-truststore-injection-webhook-certs

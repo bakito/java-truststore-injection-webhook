@@ -14,8 +14,8 @@ metadata:
 spec:
   secretName: java-truststore-injection-webhook-certs
   dnsNames:
-    - "*.java-truststore-injection-webhook.svc.cluster.local"
-    - "*.java-truststore-injection-webhook.svc"
-    - "*.java-truststore-injection-webhook"
+    - "*.jti.svc.cluster.local"
+    - "*.jti.svc"
+    - "*.jti"
   issuerRef:
     name: selfsigned-issuer

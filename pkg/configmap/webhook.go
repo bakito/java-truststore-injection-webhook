@@ -60,6 +60,7 @@ func (w *Webhook) Default(ctx context.Context, obj runtime.Object) error {
 	cm := obj.(*corev1.ConfigMap)
 
 	l := log.FromContext(ctx).WithValues("configmap", cm.Name)
+	// req, err := admission.RequestFromContext(ctx);
 
 	tsn := DefaultTruststoreName
 	if cm.Labels != nil {
