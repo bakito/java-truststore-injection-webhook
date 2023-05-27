@@ -1,0 +1,10 @@
+apiVersion: eventlogger.bakito.ch/v1
+kind: EventLogger
+metadata:
+  name: example-eventlogger
+  namespace: e2e-test
+spec:
+  kinds:
+    - name: Pod
+      skipReasons:
+        - Pulled
