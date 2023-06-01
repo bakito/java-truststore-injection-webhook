@@ -32,6 +32,7 @@ jobs:
           push: true
           tags: ghcr.io/bakito/java-truststore-injection-webhook:latest,ghcr.io/bakito/java-truststore-injection-webhook:${{ github.event.release.tag_name }}
           platforms: linux/amd64
+          provenance: false
           build-args: |
             VERSION=${{ github.event.release.tag_name }}
             BUILD=${{ env.curr_date }}
@@ -44,6 +45,7 @@ jobs:
           push: true
           tags: ghcr.io/bakito/java-truststore-injection-webhook:main
           platforms: linux/amd64
+          provenance: false
           build-args: |
             VERSION=main
             BUILD=${{ env.curr_date }}
