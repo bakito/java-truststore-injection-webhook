@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-kubectl get svc -n jti 
+
 echo "💾 Creating ConfigMaps"
 kubectl apply -n jti -f testdata/e2e/testConfigMaps.yaml
 
