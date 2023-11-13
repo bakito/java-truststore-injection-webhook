@@ -74,10 +74,18 @@ jobs:
           java-version: '17'
 
       - name: 🛃 Test generated trust stores
+        id: test_generated_stores
         run: ./testdata/e2e/testConfigMaps.sh
+        continue-on-error: true
 
-      - name: 📜 Show pod logs
+      - name: 📜 Print pod logs
         run: ./testdata/e2e/show-pod-logs.sh
+        
+      - name: 🛃 Fail if 'Test generated trust stores' failed
+        if: steps.test_generated_stores.outcome=='failure'
+        run: |
+          echo "Step 'Test generated trust stores' failed: Check 'Test generated trust storesr' and 'Print pod logs' as well as the job summary for errors"
+          exit 1
 
   helm:
     name: Helm Checks
