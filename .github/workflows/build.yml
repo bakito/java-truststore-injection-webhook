@@ -76,6 +76,9 @@ jobs:
       - name: 🛃 Test generated trust stores
         run: ./testdata/e2e/testConfigMaps.sh
 
+      - name: 📜 Show pod logs
+        run: ./testdata/e2e/show-pod-logs.sh
+
   helm:
     name: Helm Checks
     runs-on: ubuntu-latest
