@@ -5,5 +5,7 @@ helm upgrade --install java-truststore-injection-webhook chart \
   --namespace jti \
   --create-namespace \
   -f testdata/e2e/e2e-values.yaml \
-  --atomic
+  --atomic \
+  --wait \
+  --timeout 60s
 kubectl get pods -n jti
