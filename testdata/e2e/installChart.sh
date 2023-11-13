@@ -9,3 +9,5 @@ helm upgrade --install java-truststore-injection-webhook chart \
   --wait \
   --timeout 60s
 kubectl get pods -n jti
+
+sleep 10
