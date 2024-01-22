@@ -1,6 +1,6 @@
 module github.com/bakito/java-truststore-injection-webhook
 
-go 1.20
+go 1.21
 
 require (
 	github.com/onsi/ginkgo/v2 v2.15.0
