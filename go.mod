@@ -7,9 +7,9 @@ require (
 	github.com/onsi/gomega v1.31.1
 	github.com/pavel-v-chernykh/keystore-go v2.1.0+incompatible
 	github.com/prometheus/client_golang v1.18.0
-	k8s.io/api v0.29.1
-	k8s.io/apimachinery v0.29.1
-	k8s.io/client-go v0.29.1
+	k8s.io/api v0.29.2
+	k8s.io/apimachinery v0.29.2
+	k8s.io/client-go v0.29.2
 	k8s.io/klog/v2 v2.120.1
 	sigs.k8s.io/controller-runtime v0.17.1
 )
