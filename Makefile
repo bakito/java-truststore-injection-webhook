@@ -39,22 +39,18 @@ $(LOCALBIN):
 	mkdir -p $(LOCALBIN)
 
 ## Tool Binaries
-SEMVER ?= $(LOCALBIN)/semver
 GOLANGCI_LINT ?= $(LOCALBIN)/golangci-lint
 GORELEASER ?= $(LOCALBIN)/goreleaser
 HELM_DOCS ?= $(LOCALBIN)/helm-docs
+SEMVER ?= $(LOCALBIN)/semver
 
 ## Tool Versions
+GOLANGCI_LINT_VERSION ?= v1.59.1
+GORELEASER_VERSION ?= v2.0.1
+HELM_DOCS_VERSION ?= v1.13.1
 SEMVER_VERSION ?= v1.1.3
-GOLANGCI_LINT_VERSION ?= v1.54.2
-GORELEASER_VERSION ?= v1.20.0
-HELM_DOCS_VERSION ?= v1.11.0
 
 ## Tool Installer
-.PHONY: semver
-semver: $(SEMVER) ## Download semver locally if necessary.
-$(SEMVER): $(LOCALBIN)
-	test -s $(LOCALBIN)/semver || GOBIN=$(LOCALBIN) go install github.com/bakito/semver@$(SEMVER_VERSION)
 .PHONY: golangci-lint
 golangci-lint: $(GOLANGCI_LINT) ## Download golangci-lint locally if necessary.
 $(GOLANGCI_LINT): $(LOCALBIN)
@@ -62,23 +58,27 @@ $(GOLANGCI_LINT): $(LOCALBIN)
 .PHONY: goreleaser
 goreleaser: $(GORELEASER) ## Download goreleaser locally if necessary.
 $(GORELEASER): $(LOCALBIN)
-	test -s $(LOCALBIN)/goreleaser || GOBIN=$(LOCALBIN) go install github.com/goreleaser/goreleaser@$(GORELEASER_VERSION)
+	test -s $(LOCALBIN)/goreleaser || GOBIN=$(LOCALBIN) go install github.com/goreleaser/goreleaser/v2@$(GORELEASER_VERSION)
 .PHONY: helm-docs
 helm-docs: $(HELM_DOCS) ## Download helm-docs locally if necessary.
 $(HELM_DOCS): $(LOCALBIN)
 	test -s $(LOCALBIN)/helm-docs || GOBIN=$(LOCALBIN) go install github.com/norwoodj/helm-docs/cmd/helm-docs@$(HELM_DOCS_VERSION)
+.PHONY: semver
+semver: $(SEMVER) ## Download semver locally if necessary.
+$(SEMVER): $(LOCALBIN)
+	test -s $(LOCALBIN)/semver || GOBIN=$(LOCALBIN) go install github.com/bakito/semver@$(SEMVER_VERSION)
 
 ## Update Tools
 .PHONY: update-toolbox-tools
 update-toolbox-tools:
 	@rm -f \
-		$(LOCALBIN)/semver \
 		$(LOCALBIN)/golangci-lint \
 		$(LOCALBIN)/goreleaser \
-		$(LOCALBIN)/helm-docs
+		$(LOCALBIN)/helm-docs \
+		$(LOCALBIN)/semver
 	toolbox makefile -f $(LOCALDIR)/Makefile \
-		github.com/bakito/semver \
 		github.com/golangci/golangci-lint/cmd/golangci-lint \
-		github.com/goreleaser/goreleaser \
-		github.com/norwoodj/helm-docs/cmd/helm-docs
+		github.com/goreleaser/goreleaser/v2 \
+		github.com/norwoodj/helm-docs/cmd/helm-docs \
+		github.com/bakito/semver
 ## toolbox - end
