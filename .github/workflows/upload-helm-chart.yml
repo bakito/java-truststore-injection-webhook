@@ -46,7 +46,7 @@ jobs:
         uses: engineerd/configurator@v0.0.10
         with:
           name: cr
-          url: https://github.com/helm/chart-releaser/releases/download/v1..1/chart-releaser_1..1_linux_amd64.tar.gz
+          url: https://github.com/helm/chart-releaser/releases/download/v1.6.1/chart-releaser_1.6.1_linux_amd64.tar.gz
           pathInArchive: cr
 
       - name: Upload Chart
