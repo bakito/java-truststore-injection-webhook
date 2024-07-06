@@ -18,8 +18,7 @@ release: goreleaser semver
 	$(GORELEASER) --clean
 
 test-release: goreleaser
-	$(GORELEASER) --skip-publish --snapshot --rm-dist
-
+	$(GORELEASER) --skip=publish --snapshot --clean
 
 docs: helm-docs
 	$(HELM_DOCS)
