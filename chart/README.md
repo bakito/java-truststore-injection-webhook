@@ -6,9 +6,17 @@ A Helm chart to install the java truststore injection webhook
 
 ## Installation
 
+### oci
+
+```console
+helm install my-java-truststore-injection-webhook oci://ghcr.io/bakito/helm-charts/java-truststore-injection-webhook --version 0.0.7
+```
+
+### helm repository
+
 ```console
 helm repo add bakito https://charts.bakito.net
-helm install java-truststore-injection-webhook bakito/java-truststore-injection-webhook
+helm install my-java-truststore-injection-webhook bakito/java-truststore-injection-webhook --version 0.0.7
 ```
 
 ## Values
