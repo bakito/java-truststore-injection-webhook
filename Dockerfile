@@ -1,5 +1,5 @@
 # Build the manager binary
-FROM golang:1.22-bullseye as builder
+FROM golang:1.23-bullseye as builder
 RUN apt-get update && apt-get install -y upx
 
 WORKDIR /workspace
