@@ -2,8 +2,8 @@
 include ./.toolbox.mk
 
 # Run go golanci-lint
-lint: golangci-lint
-	$(GOLANGCI_LINT) run --fix
+lint: tb.golangci-lint
+	$(TB_GOLANGCI_LINT) run --fix
 
 # Run go mod tidy
 tidy:
@@ -15,16 +15,16 @@ test: tidy lint
 	go tool cover -func=coverage.out
 
 # Run tests
-release: goreleaser semver
-	@version=$$($(LOCALBIN)/semver); \
+release: tb.goreleaser tb.semver
+	@version=$$($(TB_SEMVER)); \
 	git tag -s $$version -m"Release $$version"
-	$(GORELEASER) --clean
+	$(TB_GORELEASER) --clean
 
-test-release: goreleaser
-	$(GORELEASER) --skip=publish --snapshot --clean
+test-release: tb.goreleaser
+	$(TB_GORELEASER) --skip=publish --snapshot --clean
 
-docs: helm-docs
-	$(HELM_DOCS)
+docs: tb.helm-docs
+	$(TB_HELM_DOCS)
 
 helm-lint: docs
 	helm lint ./chart
