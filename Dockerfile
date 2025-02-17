@@ -1,6 +1,6 @@
 # Build the manager binary
-FROM golang:1.23-bullseye as builder
-RUN apt-get update && apt-get install -y upx
+FROM golang:1.24-alpine AS builder
+RUN apk update && apk add upx
 
 WORKDIR /workspace
 # Copy the Go Modules manifests
