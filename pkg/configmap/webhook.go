@@ -100,7 +100,7 @@ func (w *Webhook) Default(ctx context.Context, obj runtime.Object) error {
 		allPems = append(allPems, pems...)
 	}
 
-	b, _ := exportCerts(allPems, pass, cm.ObjectMeta.CreationTimestamp.Time)
+	b, _ := exportCerts(allPems, pass, cm.CreationTimestamp.Time)
 
 	if cm.BinaryData == nil {
 		cm.BinaryData = make(map[string][]byte)
