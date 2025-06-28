@@ -16,6 +16,11 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "go.mod"
+
       - name: Configure Git
         run: |
           git config user.name "$GITHUB_ACTOR"
@@ -38,7 +43,7 @@ jobs:
           VERSION=$(echo "${{github.event.release.tag_name }}" | sed 's/v//g')
           sed -i "s/^version:.*$/version: ${VERSION}/"        ./chart//Chart.yaml
           sed -i "s/^appVersion:.*$/appVersion: v${VERSION}/" ./chart//Chart.yaml
-          make docs
+          make helm-docs
           helm package ./chart/ --version $VERSION --app-version v$VERSION -d dist
           helm push dist/java-truststore-injection-webhook-${VERSION}.tgz oci://ghcr.io/bakito/helm-charts
 

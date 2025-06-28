@@ -23,7 +23,7 @@ release: tb.goreleaser tb.semver
 test-release: tb.goreleaser
 	$(TB_GORELEASER) --skip=publish --snapshot --clean
 
-docs: tb.helm-docs
+helm-docs: tb.helm-docs
 	$(TB_HELM_DOCS)
 
 helm-lint: docs
