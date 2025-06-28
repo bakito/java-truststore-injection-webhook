@@ -26,7 +26,7 @@ test-release: tb.goreleaser
 helm-docs: tb.helm-docs
 	$(TB_HELM_DOCS)
 
-helm-lint: docs
+helm-lint: helm-docs
 	helm lint ./chart
 
 helm-template:
