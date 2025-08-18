@@ -1,5 +1,5 @@
 # Build the manager binary
-FROM golang:1.24-alpine AS builder
+FROM golang:1.25-alpine AS builder
 RUN apk update && apk add upx
 
 WORKDIR /workspace
