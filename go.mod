@@ -3,8 +3,8 @@ module github.com/bakito/java-truststore-injection-webhook
 go 1.24.0
 
 require (
-	github.com/onsi/ginkgo/v2 v2.25.1
-	github.com/onsi/gomega v1.38.1
+	github.com/onsi/ginkgo/v2 v2.25.2
+	github.com/onsi/gomega v1.38.2
 	github.com/pavel-v-chernykh/keystore-go v2.1.0+incompatible
 	github.com/prometheus/client_golang v1.23.0
 	k8s.io/api v0.34.0
