@@ -49,8 +49,8 @@ type Webhook struct {
 
 // SetupWebhookWithManager setup this webhook
 func (w *Webhook) SetupWebhookWithManager(mgr manager.Manager) error {
-	return builder.WebhookManagedBy(mgr).
-		For(&corev1.ConfigMap{}).
+	cm := &corev1.ConfigMap{}
+	return builder.WebhookManagedBy(mgr, cm).
 		WithDefaulter(w).
 		Complete()
 }
