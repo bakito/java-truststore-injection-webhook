@@ -50,6 +50,8 @@ jobs:
 
       - name: 🕹️ Install kind with registry
         uses: bakito/kind-with-registry-action@main
+        with:
+          kind_cluster_name: e2e
 
       - name: 🖼️ Build image
         run: ./testdata/e2e/buildImage.sh
