@@ -1,7 +1,7 @@
 image:
-  repository: localhost:5001/jti
+  repository: jti
   tag: e2e
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
 
 securityContext:
   allowPrivilegeEscalation: false
