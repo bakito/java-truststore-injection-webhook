@@ -14,16 +14,16 @@ import (
 )
 
 const (
-	// DefaultTruststoreName default name of the generated truststore
+	// DefaultTruststoreName default name of the generated truststore.
 	DefaultTruststoreName = "cacerts"
 
-	// LabelEnabled k8s label to enable java truststore injection
+	// LabelEnabled k8s label to enable java truststore injection.
 	LabelEnabled = "jti.bakito.ch/inject-truststore"
-	// LabelTruststoreName k8s label to define a custom truststore name
+	// LabelTruststoreName k8s label to define a custom truststore name.
 	LabelTruststoreName = "jti.bakito.ch/truststore-name"
 
 	annotationTruststorePass = "jti.bakito.ch/truststore-password" // #nosec G101
-	// AnnotationLastTruststoreName k8s annotation to keep track of the last truststore name
+	// AnnotationLastTruststoreName k8s annotation to keep track of the last truststore name.
 	AnnotationLastTruststoreName = "jti.bakito.ch/last-injected-truststore-name"
 )
 
@@ -40,10 +40,10 @@ func init() {
 	metrics.Registry.MustRegister(certsInConfigMap)
 }
 
-// Webhook implementation
+// Webhook implementation.
 type Webhook struct{}
 
-// SetupWebhookWithManager setup this webhook
+// SetupWebhookWithManager setup this webhook.
 func (w *Webhook) SetupWebhookWithManager(mgr manager.Manager) error {
 	cm := &corev1.ConfigMap{}
 	return builder.WebhookManagedBy(mgr, cm).
@@ -51,10 +51,9 @@ func (w *Webhook) SetupWebhookWithManager(mgr manager.Manager) error {
 		Complete()
 }
 
-// Default mutate the configmap
-func (w *Webhook) Default(ctx context.Context, cm *corev1.ConfigMap) error {
+// Default mutate the configmap.
+func (*Webhook) Default(ctx context.Context, cm *corev1.ConfigMap) error {
 	l := log.FromContext(ctx).WithValues("configmap", cm.Name)
-	// req, err := admission.RequestFromContext(ctx);
 
 	tsn := DefaultTruststoreName
 	if cm.Labels != nil {

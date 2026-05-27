@@ -15,7 +15,6 @@ func exportCerts(pems []*pem.Block, jksPassword string, t time.Time) ([]byte, er
 	ks := keystore.KeyStore{}
 
 	for i, p := range pems {
-
 		ce := &keystore.TrustedCertificateEntry{
 			Entry: keystore.Entry{
 				CreationDate: t,
@@ -38,8 +37,8 @@ func exportCerts(pems []*pem.Block, jksPassword string, t time.Time) ([]byte, er
 	return buf.Bytes(), nil
 }
 
-func alias(pem []byte, i int) string {
-	c, err := x509.ParseCertificate(pem)
+func alias(cert []byte, i int) string {
+	c, err := x509.ParseCertificate(cert)
 	if err != nil || c.Subject.CommonName == "" {
 		return fmt.Sprintf("truststore-injector_%d", i)
 	}
