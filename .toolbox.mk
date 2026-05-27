@@ -15,9 +15,13 @@ TB_HELM_DOCS ?= $(TB_LOCALBIN)/helm-docs
 TB_SEMVER ?= $(TB_LOCALBIN)/semver
 
 ## Tool Versions
-TB_GOLANGCI_LINT_VERSION ?= v2.9.0
-TB_GORELEASER_VERSION ?= v2.13.3
+# renovate: packageName=github.com/golangci/golangci-lint/v2
+TB_GOLANGCI_LINT_VERSION ?= v2.12.2
+# renovate: packageName=github.com/goreleaser/goreleaser/v2
+TB_GORELEASER_VERSION ?= v2.16.0
+# renovate: packageName=github.com/norwoodj/helm-docs/cmd/helm-docs
 TB_HELM_DOCS_VERSION ?= v1.14.2
+# renovate: packageName=github.com/bakito/semver
 TB_SEMVER_VERSION ?= v1.1.10
 
 ## Tool Installer
@@ -50,7 +54,7 @@ tb.reset:
 ## Update Tools
 .PHONY: tb.update
 tb.update: tb.reset
-	toolbox makefile -f $(TB_LOCALDIR)/Makefile \
+	toolbox makefile --renovate -f $(TB_LOCALDIR)/Makefile \
 		github.com/golangci/golangci-lint/v2/cmd/golangci-lint \
 		github.com/goreleaser/goreleaser/v2 \
 		github.com/norwoodj/helm-docs/cmd/helm-docs \
