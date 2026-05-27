@@ -4,11 +4,13 @@ import (
 	"context"
 	"time"
 
-	"github.com/bakito/java-truststore-injection-webhook/pkg/configmap"
-	. "github.com/onsi/ginkgo/v2"
-	. "github.com/onsi/gomega"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
+	"github.com/bakito/java-truststore-injection-webhook/pkg/configmap"
+
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("Configmap", func() {
@@ -81,7 +83,7 @@ var _ = Describe("Configmap", func() {
 })
 
 const (
-	// openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3650 -nodes -subj "/C=XX/ST=github/L=bakito/CN=java-truststore-injection-webhook"
+	// openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3650 -nodes -subj "/C=XX/ST=github/L=bakito/CN=java-truststore-injection-webhook".
 	cert = `-----BEGIN CERTIFICATE-----
 MIIFmTCCA4GgAwIBAgIUKvSUzRiN3GyPAJk+x7zywVJIjL8wDQYJKoZIhvcNAQEL
 BQAwWzELMAkGA1UEBhMCWFgxDzANBgNVBAgMBmdpdGh1YjEPMA0GA1UEBwwGYmFr
