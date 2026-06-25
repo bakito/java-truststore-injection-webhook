@@ -11,7 +11,7 @@ image:
   # -- Image pull policy
   pullPolicy: IfNotPresent
   # -- Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "@sha256:f686aa10badcabe1d5e01923a9513013c8f484878bb4cca87846ca170a8f63cb"
 
 # -- String to partially override "argo-rollouts.fullname" template
 nameOverride: ""
