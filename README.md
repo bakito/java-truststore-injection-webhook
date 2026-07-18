@@ -1,4 +1,3 @@
-[![Go Report Card](https://goreportcard.com/badge/github.com/bakito/java-truststore-injection-webhook)](https://goreportcard.com/report/github.com/bakito/java-truststore-injection-webhook)
 [![Github Build](https://github.com/bakito/java-truststore-injection-webhook/actions/workflows/build.yml/badge.svg)](https://github.com/bakito/java-truststore-injection-webhook/actions/workflows/build.yml)
 [![GitHub Release](https://img.shields.io/github/release/bakito/java-truststore-injection-webhook.svg?style=flat)](https://github.com/bakito/java-truststore-injection-webhook/releases)
 
